@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{
+            min-height:100vh;
+            display:flex;flex-direction:column;justify-content: center;align-items:stretch;
+        }
+        .img-container  div{
+            width:150px;height: 150px;
+        }
+        img{
+            display:block;
+            margin:auto;
+            width:90%;height:90%;
+        }
+        .img-container{
+            display:flex;
+            flex-direction: row;
+            justify-content: space-around;
+            align-items: center;
+        }
+        .img-container img:hover{
+            box-shadow: 0px 0px 10px blue ,0px 0px 10px blue;
+        }
+</style>
+</head>
+<body>
+    <div class="container">
+        
+        <h2 align='center'>ROCK , PAPER and SCISSOR</h2>
+        <div class="img-container">
+            <div class="toDeleteAll">
+                
+                <div>
+                    <img src="imgs/rock.png" alt="" id="rock" onclick="decide(this)">
+                </div>
+                <div>
+                    <img src="imgs/paper.png" alt="" id="paper" onclick="decide(this)">
+                </div>
+                <div>
+                    <img src="imgs/scissor.png" alt="" id="scissor" onclick="decide(this)">
+                </div>
+                
+            </div>
+        </div>
+   
+    </div>
+
+    <script>
+
+        //main function start 
+        function decide(selectedchoice){
+          var human,randomchoice;
+
+           var humanchoice = selectedchoice.id;
+           var randomchoice = numberToRandomChoice(random());
+
+        //    console.log(selectedchoice,randomchoice);
+
+          let results = decideWin(humanchoice,randomchoice);// getting array as [0,1]
+          
+          var   message = showResultinText(results);
+           
+          showFinalresult(humanchoice,randomchoice,message);
+    }// main function ends
+    
+        
+    
+         //final output game through this function 
+        function showFinalresult(humanchoice,randomchoice,message){
+                   
+           var imgDataUrl={
+                 'rock': document.querySelector('#rock').src,
+                 'scissor':document.querySelector('#scissor').src,
+                 'paper':document.querySelector('#paper').src
+                         }
+
+               document.querySelector('.toDeleteAll').remove();
+
+               const humanDiv = document.createElement('div');
+               const randomDiv = document.createElement('div');
+               const testDiv = document.createElement('div');
+                     
+               humanDiv.innerHTML = "<img src='"+imgDataUrl[humanchoice] +"' style='box-shadow\
+               :0px 0px 20px 30px green'>";
+               testDiv.innerHTML = "<h1 style='color:"+message.color +" '> "+message['message']+"\
+                ";
+               randomDiv.innerHTML = "<img src='"+imgDataUrl[randomchoice] +"' style='box-shadow\
+               :0px 0px 20px 30px red'>";
+
+               document.querySelector('.img-container').appendChild(humanDiv);
+               document.querySelector('.img-container').appendChild(testDiv);
+               document.querySelector('.img-container').appendChild(randomDiv);
+
+            }
+
+            //random choice in number
+        function random(){
+            return Math.floor(Math.random()*3);
+        }
+       
+         //random choice in number to real choice as random choice
+        function numberToRandomChoice(number){
+            return ['rock','paper','scissor'][number];
+        }
+
+         //decide winner using object as database
+         function decideWin(humanchoice,randomchoice){
+                
+                winnerDataBase={    //in this data humanchoice getlow number means humanwinnerget 0
+                                          //so acces score with reverse so that winner get 2
+                    'rock':{'rock':1,'scissor':0,'paper':2},
+                    'paper':{'paper':1,'scissor':2,'rock':0},
+                    'scissor':{'scissor':1,'rock':2,"paper":0}
+                }
+    
+               var humanScore =   winnerDataBase[randomchoice][humanchoice];
+               var randomScore = winnerDataBase[humanchoice][randomchoice];
+
+                // console.log(humanScore,randomScore);
+
+               return [humanScore,randomScore];
+            }
+                 
+            //getting text result and it's colour 
+            function showResultinText([humanScore,kk]){
+          
+          if(humanScore === 0){ return {'message':'you loss','color':'red'}}
+         else if(humanScore === 1){ return {'message':"you tie",'color':'yellow'}}
+          else if(humanScore === 2) {return  {'message': 'you win','color':'green'}  }
+          
+     }
+    </script>
+</body>
+</html>
